@@ -58,7 +58,9 @@ common common-options
 library
   import:          common-options
   hs-source-dirs:  src
-  exposed-modules: StickyPrint
+  exposed-modules:
+    StickyPrint
+    StickyPrint.Simple
 
 executable sticky-print-example
   import:         common-options
