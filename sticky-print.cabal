@@ -1,63 +1,71 @@
-cabal-version:       3.0
-name:                sticky-print
-version:             0.0.0.0
-synopsis:            An output that sticks to the bottom of the terminal while the rest of your logs scroll by
+cabal-version:   3.0
+name:            sticky-print
+version:         0.0.0.0
+synopsis:
+  An output that sticks to the bottom of the terminal while the rest of your logs scroll by
+
 description:
-    An output that sticks to the bottom of the terminal while the rest of your logs scroll by.
-    See [README.md](https://github.com/madjar/sticky-print#sticky-print) for more details.
-homepage:            https://github.com/madjar/sticky-print
-bug-reports:         https://github.com/madjar/sticky-print/issues
-license:             MIT
-license-file:        LICENSE
-author:              Georges Dubus
-maintainer:          Georges Dubus <georges.dubus@hey.com>
-copyright:           2022 Georges Dubus
-build-type:          Simple
-extra-doc-files:     README.md
-                     CHANGELOG.md
-tested-with:         GHC == 8.10.7
-                     GHC == 9.0.2
-                     GHC == 9.2.2
+  An output that sticks to the bottom of the terminal while the rest of your logs scroll by.
+  See [README.md](https://github.com/madjar/sticky-print#sticky-print) for more details.
+
+homepage:        https://github.com/madjar/sticky-print
+bug-reports:     https://github.com/madjar/sticky-print/issues
+license:         MIT
+license-file:    LICENSE
+author:          Georges Dubus
+maintainer:      Georges Dubus <georges.dubus@hey.com>
+copyright:       2022 Georges Dubus
+build-type:      Simple
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+tested-with:     GHC ==8.10.7 || ==9.0.2 || ==9.2.2
 
 source-repository head
-  type:                git
-  location:            https://github.com/madjar/sticky-print.git
+  type:     git
+  location: https://github.com/madjar/sticky-print.git
+
+flag example
+  description: Build the example application
+  default:     False
 
 common common-options
-  build-depends:       base >= 4.14.3.0 && < 4.17
+  build-depends:
+    , ansi-terminal  ^>=0.11
+    , base           >=4.14.3.0 && <4.17
+    , bytestring     ^>=0.11
 
-  ghc-options:         -Wall
-                       -Wcompat
-                       -Widentities
-                       -Wincomplete-uni-patterns
-                       -Wincomplete-record-updates
-                       -Wredundant-constraints
-                       -Wnoncanonical-monad-instances
-  if impl(ghc >= 8.2)
-    ghc-options:       -fhide-source-paths
-  if impl(ghc >= 8.4)
-    ghc-options:       -Wmissing-export-lists
-                       -Wpartial-fields
-  if impl(ghc >= 8.8)
-    ghc-options:       -Wmissing-deriving-strategies
-                       -fwrite-ide-info
-                       -hiedir=.hie
-  if impl(ghc >= 8.10)
-    ghc-options:       -Wunused-packages
+  ghc-options:
+    -Wall -Wcompat -Widentities -Wincomplete-uni-patterns
+    -Wincomplete-record-updates -Wredundant-constraints
+    -Wnoncanonical-monad-instances
 
-  default-language:    Haskell2010
+  if impl(ghc >=8.2)
+    ghc-options: -fhide-source-paths
+
+  if impl(ghc >=8.4)
+    ghc-options: -Wmissing-export-lists -Wpartial-fields
+
+  if impl(ghc >=8.8)
+    ghc-options: -Wmissing-deriving-strategies -fwrite-ide-info -hiedir=.hie
+
+  if impl(ghc >=8.10)
+    ghc-options: -Wunused-packages
+
+  default-language: Haskell2010
 
 library
-  import:              common-options
-  hs-source-dirs:      src
-  exposed-modules:     StickyPrint
+  import:          common-options
+  hs-source-dirs:  src
+  exposed-modules: StickyPrint
 
-test-suite sticky-print-test
-  import:              common-options
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
-  main-is:             Spec.hs
-  build-depends:       sticky-print
-  ghc-options:         -threaded
-                       -rtsopts
-                       -with-rtsopts=-N
+executable sticky-print-example
+  import:         common-options
+  hs-source-dirs: app
+  build-depends:  sticky-print
+  main-is:        Example.hs
+  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
+
+  if !flag(example)
+    buildable: False
